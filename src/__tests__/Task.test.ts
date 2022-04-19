@@ -3,16 +3,7 @@ import * as w from "winston";
 import { pipe } from "fp-ts/lib/function";
 import * as T from "fp-ts/Task";
 import * as TL from "../Task";
-
-class DummyTransport extends Transport {
-  log = jest.fn();
-}
-const dummyTransport = new DummyTransport();
-
-w.configure({
-  level: "debug",
-  transports: [dummyTransport]
-});
+import { useDummyTransport } from "../../__mocks__/transports";
 
 const dummyMessage = "dummy-message";
 const dummyItem = "dummy-item";
@@ -23,6 +14,7 @@ describe("index", () => {
   });
 
   it("log with string message", async () => {
+    const dummyTransport = useDummyTransport();
     const result = await pipe(dummyItem, T.of, TL.log("info", dummyMessage))();
     expect(result).toEqual(dummyItem);
     expect(dummyTransport.log).toBeCalledWith(
@@ -32,6 +24,7 @@ describe("index", () => {
   });
 
   it("log with function message", async () => {
+    const dummyTransport = useDummyTransport();
     const result = await pipe(
       dummyItem,
       T.of,

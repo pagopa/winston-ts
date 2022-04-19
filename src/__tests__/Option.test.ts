@@ -3,6 +3,7 @@ import * as w from "winston";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/Option";
 import * as OL from "../Option";
+import { useDummyTransport } from "../../__mocks__/transports";
 
 class DummyTransport extends Transport {
   log = jest.fn();

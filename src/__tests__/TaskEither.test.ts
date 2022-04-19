@@ -3,16 +3,7 @@ import * as w from "winston";
 import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/TaskEither";
 import * as TEL from "../TaskEither";
-
-class DummyTransport extends Transport {
-  log = jest.fn();
-}
-const dummyTransport = new DummyTransport();
-
-w.configure({
-  level: "debug",
-  transports: [dummyTransport]
-});
+import { useDummyTransport } from "../../__mocks__/transports";
 
 const dummyMessage = "dummy-message";
 const dummyItem = "dummy-item";
@@ -23,11 +14,13 @@ describe("index", () => {
   });
 
   it("do not log with left", async () => {
+    const dummyTransport = useDummyTransport();
     await pipe(dummyItem, TE.left, TEL.log("info", dummyMessage))();
     expect(dummyTransport.log).toBeCalledTimes(0);
   });
 
   it("log with string message", async () => {
+    const dummyTransport = useDummyTransport();
     const result = await pipe(
       dummyItem,
       TE.right,
@@ -41,6 +34,7 @@ describe("index", () => {
   });
 
   it("log with function message", async () => {
+    const dummyTransport = useDummyTransport();
     const result = await pipe(
       dummyItem,
       TE.right,
@@ -57,11 +51,13 @@ describe("index", () => {
   });
 
   it("do not logLeft with right", async () => {
+    const dummyTransport = useDummyTransport();
     await pipe(dummyItem, TE.right, TEL.logLeft("info", dummyMessage))();
     expect(dummyTransport.log).toBeCalledTimes(0);
   });
 
   it("logLeft with string message", async () => {
+    const dummyTransport = useDummyTransport();
     const result = await pipe(
       dummyItem,
       TE.left,
