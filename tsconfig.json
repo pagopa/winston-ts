@@ -6,16 +6,19 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
-    "noImplicitAny": true,
-    "declaration": true,
     "sourceMap": true,
-    "lib": []
+    "resolveJsonModule": true,
+    "declaration": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
+    "__mocks__",
+    "dist",
     "node_modules",
-    "src/**/__tests__/*"
+    "**/__tests__/*",
+    "Dangerfile.ts"
   ]
 }
