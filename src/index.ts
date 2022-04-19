@@ -50,4 +50,4 @@ export const taskEither = {
   warnLeft: TE.warnLeft
 };
 
-export { useWinston } from "./utils/config";
+export { useWinston, withConsole, FINEST_LEVEL } from "./utils/config";
