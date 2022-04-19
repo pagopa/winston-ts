@@ -35,4 +35,4 @@ export const taskEither = {
   warn: TE.warn
 };
 
-export { useWinston, withContext } from "./utils/azure";
+export { useWinston } from "./utils/config";
