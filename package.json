@@ -1,10 +1,13 @@
 {
-  "name": "winston-ts",
+  "name": "@pagopa/winston-ts",
   "version": "0.0.1",
   "description": "fp-ts wrapper for logging with winston logger",
   "repository": "https://github.com/pagopa/winston-ts",
   "author": "https://pagopa.gov.it",
   "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist/"],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
