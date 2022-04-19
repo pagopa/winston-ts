@@ -8,3 +8,5 @@ export const useWinston = (...transports: w.transport[]): void =>
     level: FINEST_LEVEL,
     transports
   });
+
+export const withConsole = (): w.transport => new w.transports.Console();
