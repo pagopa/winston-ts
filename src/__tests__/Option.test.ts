@@ -5,16 +5,6 @@ import * as O from "fp-ts/Option";
 import * as OL from "../Option";
 import { useDummyTransport } from "../../__mocks__/transports";
 
-class DummyTransport extends Transport {
-  log = jest.fn();
-}
-const dummyTransport = new DummyTransport();
-
-w.configure({
-  level: "debug",
-  transports: [dummyTransport]
-});
-
 const dummyMessage = "dummy-message";
 const dummyItem = "dummy-item";
 
@@ -24,11 +14,13 @@ describe("index", () => {
   });
 
   it("do not log with none", () => {
+    const dummyTransport = useDummyTransport();
     pipe(O.none, OL.log("info", dummyMessage));
     expect(dummyTransport.log).toBeCalledTimes(0);
   });
 
   it("log with string message", () => {
+    const dummyTransport = useDummyTransport();
     const result = pipe(dummyItem, O.some, OL.log("info", dummyMessage));
     expect(result).toEqual(expect.objectContaining({ value: dummyItem }));
     expect(dummyTransport.log).toBeCalledWith(
@@ -38,6 +30,7 @@ describe("index", () => {
   });
 
   it("log with function message", () => {
+    const dummyTransport = useDummyTransport();
     const result = pipe(
       dummyItem,
       O.some,
@@ -54,6 +47,7 @@ describe("index", () => {
   });
 
   it("log with none", () => {
+    const dummyTransport = useDummyTransport();
     const result = pipe(O.none, OL.logNone("info", dummyMessage));
     expect(result).toEqual(O.none);
     expect(dummyTransport.log).toBeCalledWith(
@@ -66,6 +60,7 @@ describe("index", () => {
   });
 
   it("do not log with some", () => {
+    const dummyTransport = useDummyTransport();
     const result = pipe(dummyItem, O.some, OL.logNone("info", dummyMessage));
     expect(result).toEqual(O.some(dummyItem));
     expect(dummyTransport.log).toBeCalledTimes(0);
