@@ -3,9 +3,9 @@ import { flow, pipe } from "fp-ts/lib/function";
 import * as w from "winston";
 import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
 
-type OptionFlow = <A>(fa: O.Option<A>) => O.Option<A>;
+type OptionFlow<A> = (fa: O.Option<A>) => O.Option<A>;
 
-export const log = (level: LogLevels, fm: LogFunction): OptionFlow =>
+export const log = <A>(level: LogLevels, fm: LogFunction<A>): OptionFlow<A> =>
   flow(
     O.map(item => {
       w.log(level, processLogFunction(fm, item));
@@ -13,15 +13,19 @@ export const log = (level: LogLevels, fm: LogFunction): OptionFlow =>
     })
   );
 
-export const debug = (fm: LogFunction): OptionFlow => flow(log("debug", fm));
+export const debug = <A>(fm: LogFunction<A>): OptionFlow<A> =>
+  flow(log("debug", fm));
 
-export const info = (fm: LogFunction): OptionFlow => flow(log("info", fm));
+export const info = <A>(fm: LogFunction<A>): OptionFlow<A> =>
+  flow(log("info", fm));
 
-export const warn = (fm: LogFunction): OptionFlow => flow(log("warn", fm));
+export const warn = <A>(fm: LogFunction<A>): OptionFlow<A> =>
+  flow(log("warn", fm));
 
-export const error = (fm: LogFunction): OptionFlow => flow(log("error", fm));
+export const error = <A>(fm: LogFunction<A>): OptionFlow<A> =>
+  flow(log("error", fm));
 
-export const logNone = <A>(level: LogLevels, fm: LogFunction) => (
+export const logNone = <A>(level: LogLevels, fm: LogFunction<undefined>) => (
   fa: O.Option<A>
 ): O.Option<A> =>
   pipe(
@@ -32,14 +36,14 @@ export const logNone = <A>(level: LogLevels, fm: LogFunction) => (
     })
   );
 
-export const debugNone = (fm: LogFunction): OptionFlow =>
+export const debugNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("debug", fm));
 
-export const infoNone = (fm: LogFunction): OptionFlow =>
+export const infoNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("info", fm));
 
-export const warnNone = (fm: LogFunction): OptionFlow =>
+export const warnNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("warn", fm));
 
-export const errorNone = (fm: LogFunction): OptionFlow =>
+export const errorNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("error", fm));

@@ -3,9 +3,9 @@ import * as T from "fp-ts/Task";
 import * as w from "winston";
 import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
 
-type TaskFlow = <A>(ma: T.Task<A>) => T.Task<A>;
+type TaskFlow<A> = (ma: T.Task<A>) => T.Task<A>;
 
-export const log = (level: LogLevels, fm: LogFunction): TaskFlow =>
+export const log = <A>(level: LogLevels, fm: LogFunction<A>): TaskFlow<A> =>
   flow(
     T.map(item => {
       w.log(level, processLogFunction(fm, item));
@@ -13,10 +13,14 @@ export const log = (level: LogLevels, fm: LogFunction): TaskFlow =>
     })
   );
 
-export const debug = (fm: LogFunction): TaskFlow => flow(log("debug", fm));
+export const debug = <A>(fm: LogFunction<A>): TaskFlow<A> =>
+  flow(log("debug", fm));
 
-export const info = (fm: LogFunction): TaskFlow => flow(log("info", fm));
+export const info = <A>(fm: LogFunction<A>): TaskFlow<A> =>
+  flow(log("info", fm));
 
-export const warn = (fm: LogFunction): TaskFlow => flow(log("warn", fm));
+export const warn = <A>(fm: LogFunction<A>): TaskFlow<A> =>
+  flow(log("warn", fm));
 
-export const error = (fm: LogFunction): TaskFlow => flow(log("error", fm));
+export const error = <A>(fm: LogFunction<A>): TaskFlow<A> =>
+  flow(log("error", fm));
