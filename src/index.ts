@@ -5,10 +5,15 @@ import * as TE from "./TaskEither";
 
 export const option = {
   debug: O.debug,
+  debugNone: O.debugNone,
   error: O.error,
+  errorNone: O.errorNone,
   info: O.info,
+  infoNone: O.infoNone,
   log: O.log,
-  warn: O.warn
+  logNone: O.logNone,
+  warn: O.warn,
+  warnNone: O.warnNone
 };
 
 export const task = {
@@ -21,18 +26,28 @@ export const task = {
 
 export const either = {
   debug: E.debug,
+  debugLeft: E.debugLeft,
   error: E.error,
+  errorLeft: E.errorLeft,
   info: E.info,
+  infoLeft: E.infoLeft,
   log: E.log,
-  warn: E.warn
+  logLeft: E.logLeft,
+  warn: E.warn,
+  warnLeft: E.warnLeft
 };
 
 export const taskEither = {
   debug: TE.debug,
+  debugLeft: TE.debugLeft,
   error: TE.error,
+  errorLeft: TE.errorLeft,
   info: TE.info,
+  infoLeft: TE.infoLeft,
   log: TE.log,
-  warn: TE.warn
+  logLeft: TE.logLeft,
+  warn: TE.warn,
+  warnLeft: TE.warnLeft
 };
 
 export { useWinston } from "./utils/config";
