@@ -32,14 +32,14 @@ export const logNone = <A>(level: LogLevels, fm: LogFunction) => (
     })
   );
 
-export const debugLeft = (fm: LogFunction): OptionFlow =>
+export const debugNone = (fm: LogFunction): OptionFlow =>
   flow(logNone("debug", fm));
 
-export const infoLeft = (fm: LogFunction): OptionFlow =>
+export const infoNone = (fm: LogFunction): OptionFlow =>
   flow(logNone("info", fm));
 
-export const warnLeft = (fm: LogFunction): OptionFlow =>
+export const warnNone = (fm: LogFunction): OptionFlow =>
   flow(logNone("warn", fm));
 
-export const errorLeft = (fm: LogFunction): OptionFlow =>
+export const errorNone = (fm: LogFunction): OptionFlow =>
   flow(logNone("error", fm));
