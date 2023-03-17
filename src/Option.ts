@@ -42,10 +42,3 @@ export const warnNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
 
 export const errorNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("error", fm));
-
-useWinston(withConsole());
-pipe(
-  O.some("PIPPO"),
-  info(s => [`${s} CANNUCCIA`, { dummy: "dummy" }]),
-  info(`CANNUCCIA`)
-);
