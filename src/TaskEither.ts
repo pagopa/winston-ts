@@ -1,24 +1,16 @@
 import { flow } from "fp-ts/lib/function";
 import * as TE from "fp-ts/TaskEither";
-import * as w from "winston";
-import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
+import { LogFunction, LogLevels, peek } from "./types/logging";
 
 type TaskEitherFlow<E, A> = (ma: TE.TaskEither<E, A>) => TE.TaskEither<E, A>;
 
 export const log = <E, A>(
   level: LogLevels,
   fm: LogFunction<A>
-): TaskEitherFlow<E, A> =>
-  flow(
-    TE.map(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+): TaskEitherFlow<E, A> => flow(TE.map(peek(level, fm)));
 
-export const debug = <E, A>(
-  fm: ((a: A) => string) | string
-): TaskEitherFlow<E, A> => flow(log("debug", fm));
+export const debug = <E, A>(fm: LogFunction<A>): TaskEitherFlow<E, A> =>
+  flow(log("debug", fm));
 
 export const info = <E, A>(fm: LogFunction<A>): TaskEitherFlow<E, A> =>
   flow(log("info", fm));
@@ -32,13 +24,7 @@ export const error = <E, A>(fm: LogFunction<A>): TaskEitherFlow<E, A> =>
 export const logLeft = <E, A>(
   level: LogLevels,
   fm: LogFunction<E>
-): TaskEitherFlow<E, A> =>
-  flow(
-    TE.mapLeft(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+): TaskEitherFlow<E, A> => flow(TE.mapLeft(peek(level, fm)));
 
 export const debugLeft = <E, A>(fm: LogFunction<E>): TaskEitherFlow<E, A> =>
   flow(logLeft("debug", fm));

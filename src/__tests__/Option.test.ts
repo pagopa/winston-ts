@@ -1,5 +1,3 @@
-import * as Transport from "winston-transport";
-import * as w from "winston";
 import { pipe } from "fp-ts/lib/function";
 import * as O from "fp-ts/Option";
 import * as OL from "../Option";
@@ -7,6 +5,7 @@ import { useDummyTransport } from "../../__mocks__/transports";
 
 const dummyMessage = "dummy-message";
 const dummyItem = "dummy-item";
+const dummyMeta = {dummy: "DUMMY"};
 
 describe("index", () => {
   beforeEach(() => {
@@ -29,6 +28,16 @@ describe("index", () => {
     );
   });
 
+  it("log with string message and meta object", () => {
+    const dummyTransport = useDummyTransport();
+    const result = pipe(dummyItem, O.some, OL.log("info", [dummyMessage, dummyMeta]));
+    expect(result).toEqual(expect.objectContaining({ value: dummyItem }));
+    expect(dummyTransport.log).toBeCalledWith(
+      expect.objectContaining({ level: "info", message: dummyMessage, ...dummyMeta }),
+      expect.anything()
+    );
+  });
+
   it("log with function message", () => {
     const dummyTransport = useDummyTransport();
     const result = pipe(
@@ -41,6 +50,24 @@ describe("index", () => {
       expect.objectContaining({
         level: "info",
         message: `${dummyItem} ${dummyMessage}`
+      }),
+      expect.anything()
+    );
+  });
+
+  it("log with function message and meta object", () => {
+    const dummyTransport = useDummyTransport();    
+    const result = pipe(
+      dummyItem,
+      O.some,
+      OL.log("info", item => [`${item} ${dummyMessage}`, dummyMeta])
+    );
+    expect(result).toEqual(expect.objectContaining({ value: dummyItem }));
+    expect(dummyTransport.log).toBeCalledWith(
+      expect.objectContaining({
+        level: "info",
+        message: `${dummyItem} ${dummyMessage}`,
+        ...dummyMeta
       }),
       expect.anything()
     );

@@ -1,20 +1,13 @@
 import * as ER from "fp-ts/Either";
 import { flow } from "fp-ts/lib/function";
-import * as w from "winston";
-import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
+import { LogFunction, LogLevels, peek } from "./types/logging";
 
 type EitherFlow<E, A> = (ma: ER.Either<E, A>) => ER.Either<E, A>;
 
 export const log = <E, A>(
   level: LogLevels,
   fm: LogFunction<A>
-): EitherFlow<E, A> =>
-  flow(
-    ER.map(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+): EitherFlow<E, A> => flow(ER.map(peek(level, fm)));
 
 export const debug = <E, A>(fm: LogFunction<A>): EitherFlow<E, A> =>
   flow(log("debug", fm));
@@ -31,13 +24,7 @@ export const error = <E, A>(fm: LogFunction<A>): EitherFlow<E, A> =>
 export const logLeft = <E, A>(
   level: LogLevels,
   fm: LogFunction<E>
-): EitherFlow<E, A> =>
-  flow(
-    ER.mapLeft(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+): EitherFlow<E, A> => flow(ER.mapLeft(peek(level, fm)));
 
 export const debugLeft = <E, A>(fm: LogFunction<E>): EitherFlow<E, A> =>
   flow(logLeft("debug", fm));

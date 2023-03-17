@@ -1,17 +1,11 @@
 import { flow } from "fp-ts/lib/function";
 import * as T from "fp-ts/Task";
-import * as w from "winston";
-import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
+import { LogFunction, LogLevels, peek } from "./types/logging";
 
 type TaskFlow<A> = (ma: T.Task<A>) => T.Task<A>;
 
 export const log = <A>(level: LogLevels, fm: LogFunction<A>): TaskFlow<A> =>
-  flow(
-    T.map(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+  flow(T.map(peek(level, fm)));
 
 export const debug = <A>(fm: LogFunction<A>): TaskFlow<A> =>
   flow(log("debug", fm));

@@ -1,17 +1,12 @@
 import * as O from "fp-ts/Option";
 import { flow, pipe } from "fp-ts/lib/function";
-import * as w from "winston";
-import { LogFunction, LogLevels, processLogFunction } from "./types/logging";
+import { LogFunction, LogLevels, peek } from "./types/logging";
+import { useWinston, withConsole } from "./utils/config";
 
 type OptionFlow<A> = (fa: O.Option<A>) => O.Option<A>;
 
 export const log = <A>(level: LogLevels, fm: LogFunction<A>): OptionFlow<A> =>
-  flow(
-    O.map(item => {
-      w.log(level, processLogFunction(fm, item));
-      return item;
-    })
-  );
+  flow(O.map(peek(level, fm)));
 
 export const debug = <A>(fm: LogFunction<A>): OptionFlow<A> =>
   flow(log("debug", fm));
@@ -31,7 +26,7 @@ export const logNone = <A>(level: LogLevels, fm: LogFunction<undefined>) => (
   pipe(
     fa,
     O.alt(() => {
-      w.log(level, processLogFunction(fm, undefined));
+      peek(level, fm)(undefined);
       return fa;
     })
   );
@@ -47,3 +42,10 @@ export const warnNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
 
 export const errorNone = <A>(fm: LogFunction<undefined>): OptionFlow<A> =>
   flow(logNone("error", fm));
+
+useWinston(withConsole());
+pipe(
+  O.some("PIPPO"),
+  info(s => [`${s} CANNUCCIA`, { dummy: "dummy" }]),
+  info(`CANNUCCIA`)
+);
