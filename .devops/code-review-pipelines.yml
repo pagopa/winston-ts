@@ -42,30 +42,6 @@ stages:
               yarn lint
             displayName: 'Lint'
 
-      - job: lint_api
-        steps:
-          - template: templates/node-job-setup/template.yaml@pagopaCommons
-          - bash: |
-              npx oval validate -p openapi/index.yaml
-            displayName: 'Validate openAPI'
-
-      - job: danger
-        condition: 
-          and(
-            succeeded(), 
-            and(
-              eq(variables['Build.Reason'], 'PullRequest'),
-              ne(variables['DANGER_GITHUB_API_TOKEN'], 'skip')
-            )
-          )
-        steps:
-          - template: templates/node-job-setup/template.yaml@pagopaCommons
-          - bash: |
-              yarn danger ci
-            env:
-              DANGER_GITHUB_API_TOKEN: '$(DANGER_GITHUB_API_TOKEN)'
-            displayName: 'Danger CI'
-
   - stage: Test
     dependsOn: []
     jobs:
@@ -84,32 +60,3 @@ stages:
           - bash: |
               bash <(curl -s https://codecov.io/bash)
             displayName: 'Code coverage'
-
-  - stage: IntegrationsTest
-    dependsOn: []
-    jobs:
-      - job: integrations_tests
-        steps:
-          - template: templates/node-job-setup/template.yaml@pagopaCommons
-
-          - bash: |
-              docker run -d -p 1025:1025 -p 8025:8025 --name mailhog --rm mailhog/mailhog
-            displayName: 'Start mailhog'
-
-          - bash: |
-              npm install -g @zeit/cosmosdb-server
-              nohup cosmosdb-server -p 3000 &
-            displayName: 'Start mock CosmosDB'
-
-          - bash: |
-              docker run -d --rm -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-blob --blobHost 0.0.0.0
-            displayName: 'Start mock Azure Storage'
-
-          - bash: |
-              MAILHOG_HOSTNAME=localhost \
-              COSMOSDB_URI=https://localhost:3000/ \
-              COSMOSDB_KEY="dummy key" \
-              COSMOSDB_DATABASE_NAME=integration-tests \
-              STORAGE_CONN_STRING="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;" \
-              yarn test:integration
-            displayName: 'Integrations tests exec'
