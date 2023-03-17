@@ -1,7 +1,6 @@
 import * as O from "fp-ts/Option";
 import { flow, pipe } from "fp-ts/lib/function";
 import { LogFunction, LogLevels, peek } from "./types/logging";
-import { useWinston, withConsole } from "./utils/config";
 
 type OptionFlow<A> = (fa: O.Option<A>) => O.Option<A>;
 
