@@ -48,11 +48,7 @@ stages:
       - job: unit_tests
         steps:
           - template: templates/node-job-setup/template.yaml@pagopaCommons
-
-          - script: |
-              yarn generate:definitions
-            displayName: 'Generate code'
-
+          
           - script: |
               yarn test
             displayName: 'Unit tests exec'
