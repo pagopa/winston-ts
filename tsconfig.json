@@ -8,8 +8,7 @@
     "strict": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "skipLibCheck": true
+    "declaration": true
   },
   "include": [
     "src/**/*"

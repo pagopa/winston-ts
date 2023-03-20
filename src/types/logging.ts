@@ -3,6 +3,13 @@ import * as w from "winston";
 
 export type LogLevels = "debug" | "info" | "warn" | "error";
 
+export enum LoggerId {
+  console = "console",
+  context = "context",
+  default = "default",
+  event = "event"
+}
+
 export type LogFunction<A> =
   | string
   | readonly [string, unknown]
@@ -17,10 +24,12 @@ export const processLogFunction = <A>(
   );
 
 type Peeper<A> = (item: A) => A;
-export const peek = <A>(level: LogLevels, fm: LogFunction<A>): Peeper<A> => (
-  item: A
-): ReturnType<Peeper<A>> => {
+export const peek = <A>(
+  level: LogLevels,
+  fm: LogFunction<A>,
+  loggerId: string
+): Peeper<A> => (item: A): ReturnType<Peeper<A>> => {
   const [message, meta] = processLogFunction(fm, item);
-  w.log(level, message, meta);
+  w.loggers.get(loggerId).log(level, message, meta);
   return item;
 };

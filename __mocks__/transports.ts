@@ -1,15 +1,26 @@
-import { configure } from "winston";
+import * as w from "winston";
 import * as Transport from "winston-transport";
+import { LoggerId } from "../src/types/logging";
 
 class DummyTransport extends Transport {
   log = jest.fn();
 }
 
-export const useDummyTransport = (): Transport => {
-  const dummyTransport = new DummyTransport();
-  configure({
+export const useDummyTransport = (): w.Logger => {
+  return w.loggers.add(LoggerId.default, {
     level: "debug",
-    transports: [dummyTransport]
+    transports: [new DummyTransport()]
   });
-  return dummyTransport;
 };
+
+export const useEventDummyTransport = (): w.Logger => {
+  return w.loggers.add(LoggerId.event, {
+    level: "debug",
+    transports: [ new DummyTransport()]
+  });
+};
+
+export const clear = (): void => {
+  w.loggers.close(LoggerId.default);
+  w.loggers.close(LoggerId.event);
+}
