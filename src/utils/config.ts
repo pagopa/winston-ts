@@ -1,4 +1,5 @@
 import * as w from "winston";
+import { Format } from "logform";
 import { LoggerId, LogLevels } from "../types/logging";
 
 export const FINEST_LEVEL: LogLevels = "debug";
@@ -11,13 +12,22 @@ export const useWinston = (...transports: w.transport[]): w.Logger =>
     transports
   });
 
-export const useWinstonFor = (
-  loggerId: LoggerId,
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type UseWinstonInput = {
+  readonly loggerId: LoggerId;
+  readonly format?: Format;
   // eslint-disable-next-line functional/prefer-readonly-type
-  ...transports: w.transport[]
-): w.Logger =>
+  readonly transports: w.transport[];
+};
+
+export const useWinstonFor = ({
+  loggerId,
+  format,
+  transports
+}: UseWinstonInput): w.Logger =>
   w.loggers.add(loggerId, {
     exitOnError: false,
+    format,
     level: FINEST_LEVEL,
     transports
   });
