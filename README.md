@@ -15,7 +15,7 @@ import { defaultLog, useWinston, withConsole } from "@pagopa/winston-ts";
 useWinston(withConsole());  // configure the default winston tranport
 
 pipe(
-  { name: "Bob" },
+  { name: "Queen" },
   TE.right,
   defaultLog.taskEither.info("INFO!"),   // log an info if the taskEither is right
   defaultLog.taskEither.debug(i => `DEBUG ${i.name}`), // log a debug if the taskEither is right using data conteined in the monad (rigth)
