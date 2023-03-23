@@ -3,7 +3,7 @@
 fp-ts wrapper to use [winston](https://github.com/winstonjs/winston) logging library inside a pipe.
 
 ## Quick Start
-The [index](./src/index.ts) define an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing the relative log functions (log, tarce, info, warn and error).
+The [index](./src/index.ts) define an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing log functions for it (log, trace, info, warn and error).
 A log function could be used directly in the pipe, without output changes. 
 
 ### Example
@@ -53,9 +53,9 @@ pipe(
 ### Logger params
 Each logger function support differents inputs:
 - string
-- tupla of 2 elements (a string and an unknow object)
+- tuple of 2 elements (a string and an unknown object)
 - a function with arity 1 and returning a string
-- a function with arity 1 and rutirning a tupla of 2 elements (a string and an unknown object)
+- a function with arity 1 and rutirning a tuple of 2 elements (a string and an unknown object)
 #### String input
 A logger with a `string` input, will direct used as message log. \
 The string will be provide to the transport as `message` parameter.
@@ -64,8 +64,8 @@ defaultLog.task.info("Don't STOP me NOW!");
 // Output
 // {message: "Don't STOP me NOW!"}
 ```
-#### Tupla of 2 elements
-A logger with a tupla `[string, unknown]` as input, will use the string as message and the unknow object fields will be used as [meta parameters](https://github.com/winstonjs/winston#streams-objectmode-and-info-objects). \
+#### Tuple of 2 elements
+A logger with a tuple `[string, unknown]` as input, will use the string as message and the unknown object fields will be used as [meta parameters](https://github.com/winstonjs/winston#streams-objectmode-and-info-objects). \
 The transport will receive the string as `message`, the unknown object fields deconstructed as `meta`.
 ```javascript
 defaultLog.task.info(["Don't STOP me NOW!", {galileo: "magnificooooo ", under: "pressure"}]);
@@ -83,13 +83,13 @@ pipe(
 // Output
 // {message: "Don't STOP me NOW!"}
 ```
-#### Function with arity 1 and returning a tupla of 2 elements
-A logger with a function `(a) -> [string, unknown]` as input, will execute the function providing the value wrapped by the monad as input, and use the output tupla as explained above ([Tupla of 2 elements](#tupla-of-2-elements)). 
+#### Function with arity 1 and returning a tuple of 2 elements
+A logger with a function `(a) -> [string, unknown]` as input, will execute the function providing the value wrapped by the monad as input, and use the output tuple as explained above ([Tupla of 2 elements](#tupla-of-2-elements)). 
 ```javascript
 pipe(
   "NOW",
   T.of,
-  defaultLog.task.info([a -> `Don't STOP me ${a}!`, {galileo: "magnificooooo ", under: "pressure"]),
+  defaultLog.task.info(a -> [`Don't STOP me ${a}!`, {galileo: "magnificooooo ", under: "pressure"]),
 );
 // Output
 // {message: "Don't STOP me NOW!", galileo: "magnificooooo ", under: "pressure"}
