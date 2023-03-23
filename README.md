@@ -3,7 +3,7 @@
 fp-ts wrapper to use [winston](https://github.com/winstonjs/winston) logging library inside a pipe.
 
 ## Quick Start
-The [index](./src/index.ts) define an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing log functions for it (log, trace, info, warn and error).
+The [index](./src/index.ts) define an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing log functions for it (log,  info, warn and error).
 A log function could be used directly in the pipe, without output changes. 
 
 ### Example
