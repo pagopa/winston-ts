@@ -3,6 +3,7 @@ import * as O from "./Option";
 import * as T from "./Task";
 import * as E from "./Either";
 import * as TE from "./TaskEither";
+import * as P from "./Peek";
 import { LogFunction, LoggerId, LogLevels } from "./types/logging";
 
 const init = (loggerId: LoggerId) => ({
@@ -33,6 +34,14 @@ const init = (loggerId: LoggerId) => ({
       O.logNone<A>(level, fm, loggerId),
     warn: <A>(fm: LogFunction<A>) => O.warn(fm, loggerId),
     warnNone: <A>(fm: LogFunction<undefined>) => O.warnNone<A>(fm, loggerId)
+  },
+  peek: {
+    debug: <A>(fm: LogFunction<A>) => P.debug(fm, loggerId),
+    error: <A>(fm: LogFunction<A>) => P.error(fm, loggerId),
+    info: <A>(fm: LogFunction<A>) => P.info(fm, loggerId),
+    log: <A>(level: LogLevels, fm: LogFunction<A>) =>
+      P.log(level, fm, loggerId),
+    warn: <A>(fm: LogFunction<A>) => P.warn(fm, loggerId)
   },
   task: {
     debug: <A>(fm: LogFunction<A>) => T.debug(fm, loggerId),

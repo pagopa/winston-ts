@@ -23,7 +23,7 @@ export const processLogFunction = <A>(
     typeof message === "string" ? [message, undefined] : message
   );
 
-type Peeper<A> = (item: A) => A;
+export type Peeper<A> = (item: A) => A;
 export const peek = <A>(
   level: LogLevels,
   fm: LogFunction<A>,
