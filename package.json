@@ -1,6 +1,6 @@
 {
   "name": "@pagopa/winston-ts",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "fp-ts wrapper for logging with winston logger",
   "repository": "https://github.com/pagopa/winston-ts",
   "author": "https://pagopa.gov.it",
