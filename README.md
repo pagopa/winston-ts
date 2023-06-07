@@ -3,7 +3,7 @@
 fp-ts wrapper to use [winston](https://github.com/winstonjs/winston) logging library inside a pipe.
 
 ## Quick Start
-The [index](./src/index.ts) define an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing log functions for it (log,  info, warn and error).
+The [index](./src/index.ts) defines an object for each supported fp-ts monad (Option, Either, Task and TaskEither) implementing log functions for it (log,  info, warn and error).
 A log function could be used directly in the pipe, without output changes. 
 
 ### Example
@@ -18,7 +18,7 @@ pipe(
   { name: "Queen" },
   TE.right,
   defaultLog.taskEither.info("INFO!"),   // log an info if the taskEither is right
-  defaultLog.taskEither.debug(i => `DEBUG ${i.name}`), // log a debug if the taskEither is right using data conteined in the monad (rigth)
+  defaultLog.taskEither.debug(i => `DEBUG ${i.name}`), // log a debug if the taskEither is right using data contained in the monad (right)
   TE.chain(i => TE.left(Error(i.name))),
   defaultLog.taskEither.debugLeft(i => `DEBUG ${i}`) // log a debug if the taskEither is left using data contained in the monad (left)
 );
@@ -41,7 +41,7 @@ pipe(
 );
 ```
 #### Log without a monad
-The special monad type `peek` allow you to log directly using an object instead of a monad.\
+The special monad type `peek` allows you to log directly using an object instead of a monad.\
 This is useful when we are still constructing our input.
 ```javascript
 pipe(
@@ -51,14 +51,14 @@ pipe(
 ```
 
 ### Logger params
-Each logger function support differents inputs:
+Each logger function supports different inputs:
 - string
 - tuple of 2 elements (a string and an unknown object)
-- a function with arity 1 and returning a string
-- a function with arity 1 and rutirning a tuple of 2 elements (a string and an unknown object)
+- a function with arity 1 returning a string
+- a function with arity 1 returning a tuple of 2 elements (a string and an unknown object)
 #### String input
 A logger with a `string` input, will direct used as message log. \
-The string will be provide to the transport as `message` parameter.
+The string will be provided to the transport as `message` parameter.
 ```javascript
 defaultLog.task.info("Don't STOP me NOW!");
 // Output
@@ -72,7 +72,7 @@ defaultLog.task.info(["Don't STOP me NOW!", {galileo: "magnificooooo ", under: "
 // Output
 // {message: "Don't STOP me NOW!", galileo: "magnificooooo ", under: "pressure"}
 ```
-#### Function with arity 1 and returning a string
+#### Function with arity 1 returning a string
 A logger with a function `(a) -> string` as input, will execute the function providing the value wrapped by the monad as input, and use the output string as explained above ([String input](#string-input)). 
 ```javascript
 pipe(
@@ -83,7 +83,7 @@ pipe(
 // Output
 // {message: "Don't STOP me NOW!"}
 ```
-#### Function with arity 1 and returning a tuple of 2 elements
+#### Function with arity 1 returning a tuple of 2 elements
 A logger with a function `(a) -> [string, unknown]` as input, will execute the function providing the value wrapped by the monad as input, and use the output tuple as explained above ([Tupla of 2 elements](#tupla-of-2-elements)). 
 ```javascript
 pipe(
@@ -96,8 +96,8 @@ pipe(
 ```
 ## Configure
 winston-ts use the [winston Container](https://github.com/winstonjs/winston/tree/v3.8.2#working-with-multiple-loggers-in-winston) to configure one or more logger. \
-The utility [useWinstonFor()](./src/utils/config.ts) allow you to configure and map it to be used with a specific logger type. \
-NB: Each logger must be mapped with a [LoggerId](./src/types/logging.ts): this will limit the maximum number of configured logger at time.
+The utility [useWinstonFor()](./src/utils/config.ts) allows you to configure and map it to be used with a specific logger type. \
+NB: Each logger must be mapped with a [LoggerId](./src/types/logging.ts): this will limit the maximum number of configured loggers at a time.
 ```javascript
   useWinstonFor({
                 loggerId: LoggerId.default,   // the type of the logger
@@ -132,12 +132,12 @@ useWinstonFor({
 ```
 
 ## About Side-Effect
-A winston logger is backed by a node stream. Each log call will be an asynchronous 'fire and forget': no further error will be throw by winston transport.
+A winston logger is backed by a node stream. Each log call will be an asynchronous 'fire and forget': no further error will be thrown by winston transport.
 
 ## About Azure
 This logger could be used with:
 - Azure Application Insight using the [ApplicationInsightTransport](https://github.com/pagopa/io-functions-commons/blob/v27.6.0/src/utils/transports/application_insight.ts).\
-NB: this transport will log in the Applicaiton Insight properties all the parameters given to logging function (not only the message string).
+NB: this transport will log in the Application Insight properties all the parameters given to logging function (not only the message string).
 ```javascript
 export const run = (context: Context) => { 
 ...
